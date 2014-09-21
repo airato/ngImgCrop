@@ -147,16 +147,28 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', funct
 
 
     this.getResultImageDataURI=function() {
-      var temp_ctx, temp_canvas;
+      var temp_ctx, temp_canvas, realSize;
       temp_canvas = angular.element('<canvas></canvas>')[0];
       temp_ctx = temp_canvas.getContext('2d');
       temp_canvas.width = resImgSize;
       temp_canvas.height = resImgSize;
       if(image!==null){
-        temp_ctx.drawImage(image, (theArea.getX()-theArea.getSize()/2)*(image.width/ctx.canvas.width), (theArea.getY()-theArea.getSize()/2)*(image.height/ctx.canvas.height), theArea.getSize()*(image.width/ctx.canvas.width), theArea.getSize()*(image.height/ctx.canvas.height), 0, 0, resImgSize, resImgSize);
+        realSize = Math.min(1080, theArea.getSize()*(image.width/ctx.canvas.width));
+        temp_canvas.width = realSize;
+        temp_canvas.height = realSize;
+        temp_ctx.drawImage(image,
+          (theArea.getX()-theArea.getSize()/2)*(image.width/ctx.canvas.width),
+          (theArea.getY()-theArea.getSize()/2)*(image.height/ctx.canvas.height),
+          realSize,
+          realSize,
+          0,
+          0,
+          realSize,
+          realSize);
       }
       return temp_canvas.toDataURL();
     };
+
 
     this.setNewImageSource=function(imageSource) {
       image=null;

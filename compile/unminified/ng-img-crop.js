@@ -5,14 +5,12 @@
  * Copyright (c) 2014 Alex Kaul
  * License: MIT
  *
- * Generated at Tuesday, July 22nd, 2014, 10:37:39 PM
+ * Generated at Monday, September 22nd, 2014, 12:55:51 AM
  */
 (function() {
 'use strict';
 
 var crop = angular.module('ngImgCrop', []);
-
-'use strict';
 
 crop.factory('cropAreaCircle', ['cropArea', function(CropArea) {
   var CropAreaCircle = function() {
@@ -160,13 +158,10 @@ crop.factory('cropAreaCircle', ['cropArea', function(CropArea) {
     this._posDragStartY = 0;
   };
 
-
   return CropAreaCircle;
 }]);
 
 
-
-'use strict';
 
 crop.factory('cropAreaSquare', ['cropArea', function(CropArea) {
   var CropAreaSquare = function() {
@@ -378,11 +373,8 @@ crop.factory('cropAreaSquare', ['cropArea', function(CropArea) {
     this._posDragStartY = 0;
   };
 
-
   return CropAreaSquare;
 }]);
-
-'use strict';
 
 crop.factory('cropArea', ['cropCanvas', function(CropCanvas) {
   var CropArea = function(ctx, events) {
@@ -469,8 +461,6 @@ crop.factory('cropArea', ['cropCanvas', function(CropCanvas) {
   return CropArea;
 }]);
 
-'use strict';
-
 crop.factory('cropCanvas', [function() {
   // Shape = Array of [x,y]; [0, 0] - center
   var shapeArrowNW=[[-0.5,-2],[-3,-4.5],[-0.5,-7],[-7,-7],[-7,-0.5],[-4.5,-3],[-2,-0.5]];
@@ -522,7 +512,6 @@ crop.factory('cropCanvas', [function() {
         ctx.closePath();
         ctx.restore();
     };
-
 
     /* Icons */
 
@@ -599,8 +588,6 @@ crop.factory('cropCanvas', [function() {
 
   };
 }]);
-
-'use strict';
 
 crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', function($document, CropAreaCircle, CropAreaSquare) {
   /* STATIC FUNCTIONS */
@@ -747,15 +734,25 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', funct
       }
     };
 
-
     this.getResultImageDataURI=function() {
-      var temp_ctx, temp_canvas;
+      var temp_ctx, temp_canvas, realSize;
       temp_canvas = angular.element('<canvas></canvas>')[0];
       temp_ctx = temp_canvas.getContext('2d');
       temp_canvas.width = resImgSize;
       temp_canvas.height = resImgSize;
       if(image!==null){
-        temp_ctx.drawImage(image, (theArea.getX()-theArea.getSize()/2)*(image.width/ctx.canvas.width), (theArea.getY()-theArea.getSize()/2)*(image.height/ctx.canvas.height), theArea.getSize()*(image.width/ctx.canvas.width), theArea.getSize()*(image.height/ctx.canvas.height), 0, 0, resImgSize, resImgSize);
+        realSize = Math.min(1080, theArea.getSize()*(image.width/ctx.canvas.width));
+        temp_canvas.width = realSize;
+        temp_canvas.height = realSize;
+        temp_ctx.drawImage(image,
+          (theArea.getX()-theArea.getSize()/2)*(image.width/ctx.canvas.width),
+          (theArea.getY()-theArea.getSize()/2)*(image.height/ctx.canvas.height),
+          realSize,
+          realSize,
+          0,
+          0,
+          realSize,
+          realSize);
       }
       return temp_canvas.toDataURL();
     };
@@ -895,8 +892,6 @@ crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', funct
 
 }]);
 
-
-'use strict';
 
 crop.factory('cropPubSub', [function() {
   return function() {
